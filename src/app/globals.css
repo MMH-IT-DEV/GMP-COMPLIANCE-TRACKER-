@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  /* Katana Dark Theme Colors */
-  --background: #1a1a18;
-  --card-bg: #2a2a28;
+  /* Katana Light Theme Colors */
+  --background: #f8fafc;
+  --card-bg: #ffffff;
 
   /* Brand (MyMagicHealer) */
   --sage: #BCD1CA;
@@ -15,15 +15,15 @@
   /* Status */
   --success: #8aaf6e;
   --warning: #bb8b5d;
-  --error: #ff7b6f;
+  --error: #df584c;
 
   /* Text */
-  --text-primary: #ffffff;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
   /* Border */
-  --border: #374151;
+  --border: #e2e8f0;
 
   --foreground: var(--text-primary);
 }
