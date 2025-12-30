@@ -49,7 +49,7 @@ export const checklists: Checklist[] = [
                         description: 'Every person who accesses systems containing GMP data (batch records, inventory, specifications) must have their own unique username and password. No sharing login credentials between employees.',
                         priority: 'high',
                         regulatoryQuote: '"Suitable methods of preventing unauthorized entry to the system may include the use of keys, pass cards, personal codes with passwords, biometrics, restricted access to computer equipment..."',
-                        source: 'GUI-0050 §4.12',
+                        source: 'GUI-0050 A 4.12',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.12',
                         tables: [
                             {
@@ -74,7 +74,7 @@ export const checklists: Checklist[] = [
                         description: 'A documented list of every computerized system used in GMP activities — software, databases, cloud services. Inspectors typically ask to see this first.',
                         priority: 'high',
                         regulatoryQuote: '"An up-to-date listing of all relevant systems and their GMP functionality (inventory) should be available."',
-                        source: 'GUI-0050 §4.4.3',
+                        source: 'GUI-0050 A 4.4.3',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-products/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.4',
                         tables: [
                             {
@@ -102,7 +102,7 @@ export const checklists: Checklist[] = [
                         description: 'Systems holding GMP data must automatically record all changes and deletions. The log must capture: who made the change, what was changed (old and new values), when it happened, and ideally why.',
                         priority: 'high',
                         regulatoryQuote: '"Consideration should be given, based on a risk assessment, to building into the system the creation of a record of all GMP-relevant changes and deletions (a system generated \'audit trail\')."',
-                        source: 'GUI-0050 §4.9',
+                        source: 'GUI-0050 A 4.9',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.9',
                         tables: [
                             {
@@ -130,7 +130,7 @@ export const checklists: Checklist[] = [
                         description: 'You must document when access is granted or removed from systems. Track who approved access, what level they received, and when access was revoked (e.g., when employee leaves).',
                         priority: 'high',
                         regulatoryQuote: '"There should be a defined procedure for the issue, cancellation, and alteration of authorization to enter and amend data, including the changing of personal passwords."',
-                        source: 'GUI-0050 §4.12',
+                        source: 'GUI-0050 A 4.12',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.12',
                         tables: [
                             {
@@ -158,7 +158,7 @@ export const checklists: Checklist[] = [
                         description: 'Before changing any GMP system (software update, configuration change, patch), you must: document the change, assess the impact, get approval, implement, verify, and record completion.',
                         priority: 'high',
                         regulatoryQuote: '"Any changes to a computerized system including system configurations should only be made in a controlled manner in accordance with a defined procedure."',
-                        source: 'GUI-0050 §4.10',
+                        source: 'GUI-0050 A 4.10',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.10',
                         tables: [
                             {
@@ -206,7 +206,7 @@ export const checklists: Checklist[] = [
                         description: 'A written policy specifying password requirements. Inspectors expect industry-standard practices like minimum length, complexity, and lockout after failed attempts.',
                         priority: 'medium',
                         regulatoryQuote: '"There should be a defined procedure for the issue, cancellation, and alteration of authorization to enter and amend data, including the changing of personal passwords."',
-                        source: 'GUI-0050 §4.12',
+                        source: 'GUI-0050 A 4.12',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.12',
                         evidenceNeeded: [
                             'Written policy — A document stating your password rules (minimum length, complexity, etc.)',
@@ -220,7 +220,7 @@ export const checklists: Checklist[] = [
                         description: 'A procedure for reporting IT incidents (system failures, data errors, security breaches). Can be integrated into your existing deviation/CAPA process.',
                         priority: 'medium',
                         regulatoryQuote: '"All incidents, not only system failures and data errors, should be reported and assessed."',
-                        source: 'GUI-0050 §4.13',
+                        source: 'GUI-0050 A 4.13',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.13',
                         evidenceNeeded: [
                             'Procedure for reporting problems — Can be part of your existing deviation/CAPA process',
@@ -234,7 +234,7 @@ export const checklists: Checklist[] = [
                         description: 'Periodically review each GMP system to confirm it still works correctly and remains compliant. Frequency based on risk: high-risk annually, lower-risk less frequently.',
                         priority: 'medium',
                         regulatoryQuote: '"Computerized systems should be periodically evaluated to confirm that they remain in a valid state and are GMP compliant."',
-                        source: 'GUI-0050 §4.11',
+                        source: 'GUI-0050 A 4.11',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.11',
                         evidenceNeeded: [
                             'Review schedule — List showing when each system will be reviewed (e.g., annually)',
@@ -248,7 +248,7 @@ export const checklists: Checklist[] = [
                         description: 'For cloud services or third parties that manage GMP systems, you need documentation of their responsibilities and security controls (TOS, SOC 2, ISO 27001).',
                         priority: 'medium',
                         regulatoryQuote: '"When third parties are used to provide, install, configure, integrate, validate, maintain, modify or retain a computerized system... formal agreements should exist between the parties."',
-                        source: 'GUI-0050 §4.3',
+                        source: 'GUI-0050 A 4.3',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.3',
                         evidenceNeeded: [
                             'Agreements with cloud providers — Copy of Terms of Service or Data Processing Agreement',
@@ -262,7 +262,7 @@ export const checklists: Checklist[] = [
                         description: 'Computers and servers holding GMP data should have physical access controls — locked rooms, secured areas, computers that lock when unattended.',
                         priority: 'medium',
                         regulatoryQuote: '"Physical and/or logical controls should be in place to restrict access to computerized system to authorised persons."',
-                        source: 'GUI-0050 §4.12',
+                        source: 'GUI-0050 A 4.12',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.12',
                         evidenceNeeded: [
                             'Computers are in a secure area — Describe how access is controlled (locked office, etc.)',
@@ -276,7 +276,7 @@ export const checklists: Checklist[] = [
                         description: 'Anyone managing GMP-critical systems needs documented training on GMP principles, data integrity, and the specific IT procedures they perform.',
                         priority: 'medium',
                         regulatoryQuote: '"All personnel should have appropriate qualifications, level of access and defined responsibilities to carry out their assigned duties."',
-                        source: 'GUI-0050 §4.2',
+                        source: 'GUI-0050 A 4.2',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.2',
                         evidenceNeeded: [
                             'Training records — Show that IT staff have been trained on relevant procedures',
@@ -304,7 +304,7 @@ export const checklists: Checklist[] = [
                         description: 'A short document listing which systems are backed up, how often, and where the copies are stored.',
                         priority: 'high',
                         regulatoryQuote: '"Regular backups of all relevant data should be done."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
@@ -330,7 +330,7 @@ export const checklists: Checklist[] = [
                         description: 'Having a backup SOP is not enough. You need proof that backups are actually running systematically.',
                         priority: 'high',
                         regulatoryQuote: '"The backup process should be verified to be working correctly at periodic intervals."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
@@ -356,7 +356,7 @@ export const checklists: Checklist[] = [
                         description: 'If a fire or theft affects your facility, your backups should survive. Store them at a separate and secure location.',
                         priority: 'high',
                         regulatoryQuote: '"Backup data should be stored at a separate and secure location."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
@@ -388,7 +388,7 @@ export const checklists: Checklist[] = [
                         description: 'A backup is worthless if you can\'t restore it. Test the restoration process at least once a year.',
                         priority: 'medium',
                         regulatoryQuote: '"The backup process should be verified to be working correctly at periodic intervals."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
@@ -413,7 +413,7 @@ export const checklists: Checklist[] = [
                         description: 'GMP records must be kept for specific periods. Your backups must cover these timeframes (usually 1 year past product expiry).',
                         priority: 'medium',
                         regulatoryQuote: '"Backup data should be stored... for the period of time specified for the type of data."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
                         tables: [
                             {
@@ -444,7 +444,7 @@ export const checklists: Checklist[] = [
                         description: 'Written instructions so anyone can restore systems, even if the usual IT person is unavailable.',
                         priority: 'low',
                         regulatoryQuote: '"Provisions should be made to ensure continuity of support for those processes in the event of a system breakdown."',
-                        source: 'GUI-0050 §4.16',
+                        source: 'GUI-0050 A 4.16',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.16',
                         tables: [
                             {
@@ -470,7 +470,7 @@ export const checklists: Checklist[] = [
                         description: 'RPO (Recovery Point Objective) = How much data loss is OK. RTO (Recovery Time Objective) = How fast must you recover.',
                         priority: 'low',
                         regulatoryQuote: '"The time required to bring the alternative arrangements into use should be based on risk."',
-                        source: 'GUI-0050 §4.16',
+                        source: 'GUI-0050 A 4.16',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.16',
                         tables: [
                             {
@@ -626,7 +626,7 @@ export const checklists: Checklist[] = [
                         description: 'When GMP data is changed, there should be a reason recorded. Add a comment or note explaining why.',
                         priority: 'low',
                         regulatoryQuote: '"For change or deletion of GMP-relevant data the reason should be documented."',
-                        source: 'GUI-0050 §4.9',
+                        source: 'GUI-0050 A 4.9',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.9',
                         tables: [
                             {
@@ -651,7 +651,7 @@ export const checklists: Checklist[] = [
                         description: 'Someone should periodically review audit trails to catch unauthorized changes or errors.',
                         priority: 'low',
                         regulatoryQuote: '"Audit trails need to be available and convertible to a generally intelligible form and regularly reviewed."',
-                        source: 'GUI-0050 §4.9',
+                        source: 'GUI-0050 A 4.9',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.9',
                         tables: [
                             {
@@ -720,6 +720,18 @@ export const checklists: Checklist[] = [
                         source: 'GUI-0158 §6.7',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.7',
                         tables: [
+                            {
+                                title: 'Required Fields (Per GUI-0158 A 6.7)',
+                                headers: ['Field', 'Where You Have It', 'Status'],
+                                rows: [
+                                    ['Product name', 'Shopify order line item', '✓ Already tracked'],
+                                    ['Lot/Batch number', 'Katana MO → must link to Shopify', '⚠ Check if linked'],
+                                    ['Quantity sold', 'Shopify order', '✓ Already tracked'],
+                                    ['Date of sale', 'Shopify order date', '✓ Already tracked'],
+                                    ['Customer name', 'Shopify customer', '✓ Already tracked'],
+                                    ['Customer address', 'Shopify shipping address', '✓ Already tracked']
+                                ]
+                            },
                             {
                                 title: 'Can You Do a Recall?',
                                 headers: ['✓ Ready', '✗ Not Ready'],
@@ -930,7 +942,7 @@ export const checklists: Checklist[] = [
                         description: 'Original records are the "source of truth." Never delete them — keep originals and make corrections visible.',
                         priority: 'medium',
                         regulatoryQuote: '"For the protection of data, measures should be provided against deliberate or inadvertent data changes."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
@@ -956,7 +968,7 @@ export const checklists: Checklist[] = [
                         description: 'Critical data should be checked by a second person or reviewed before the record is finalized.',
                         priority: 'medium',
                         regulatoryQuote: '"There should be recorded evidence that data has been checked for relevance, correctness, and consistency."',
-                        source: 'GUI-0050 §4.8',
+                        source: 'GUI-0050 A 4.8',
                         sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
                         tables: [
                             {
