@@ -94,54 +94,71 @@ export function useAppProgress() {
     }, []);
 
     const saveItem = async (id: string, updates: Partial<{ is_complete: boolean; status: string; notes: string }>) => {
-        // Optimistic UI Update
-        const currentItem = {
-            is_complete: state.completedItems.includes(id),
-            status: state.statuses[id] || 'need',
-            notes: state.notes[id] || '',
-            ...updates
-        };
+        // Optimistic UI Update is handled by setState in the individual functions
 
         try {
+            // For notes, we might want to debounce in the UI, but here we at least handle the upsert
             const { error } = await supabase
                 .from('gmp_progress')
                 .upsert({
                     item_id: id,
-                    ...currentItem,
+                    ...updates,
                     updated_at: new Date().toISOString()
+                }, {
+                    onConflict: 'item_id'
                 });
 
             if (error) throw error;
         } catch (err) {
             console.error('Failed to sync with cloud:', err);
-            // Even if cloud fails, we update local for persistence
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
     };
 
     const toggleComplete = (id: string, completed: boolean) => {
-        const newCompleted = completed
-            ? Array.from(new Set([...state.completedItems, id]))
-            : state.completedItems.filter(item => item !== id);
+        setState(prev => {
+            const newCompleted = completed
+                ? Array.from(new Set([...prev.completedItems, id]))
+                : prev.completedItems.filter(item => item !== id);
 
-        setState(prev => ({ ...prev, completedItems: newCompleted }));
+            const newState = { ...prev, completedItems: newCompleted };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+            return newState;
+        });
         saveItem(id, { is_complete: completed });
     };
 
     const updateStatus = (id: string, status: 'have' | 'partial' | 'need') => {
-        setState(prev => ({
-            ...prev,
-            statuses: { ...prev.statuses, [id]: status }
-        }));
+        setState(prev => {
+            const newState = { ...prev, statuses: { ...prev.statuses, [id]: status } };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+            return newState;
+        });
         saveItem(id, { status });
     };
 
+    // Use a ref to track the latest notes to avoid closure issues with debounce
+    const [pendingNotes, setPendingNotes] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            Object.entries(pendingNotes).forEach(([id, notes]) => {
+                saveItem(id, { notes });
+            });
+            setPendingNotes({});
+        }, 1000); // 1 second debounce
+
+        return () => clearTimeout(timer);
+    }, [pendingNotes]);
+
     const updateNotes = (id: string, notes: string) => {
-        setState(prev => ({
-            ...prev,
-            notes: { ...prev.notes, [id]: notes }
-        }));
-        saveItem(id, { notes });
+        // Immediate UI Update
+        setState(prev => {
+            const newState = { ...prev, notes: { ...prev.notes, [id]: notes } };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+            return newState;
+        });
+        // Queue for debounced save
+        setPendingNotes(prev => ({ ...prev, [id]: notes }));
     };
 
     const resetAll = async () => {
