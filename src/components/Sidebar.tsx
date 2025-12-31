@@ -27,8 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
             <aside className={`
                 fixed inset-y-0 left-0 z-50 w-64 bg-card-bg border-r border-border h-screen flex flex-col transition-transform duration-300 ease-in-out
-                lg:translate-x-0 lg:sticky lg:top-0
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>
                 <div className="p-4 flex-1 overflow-y-auto">
                     <div className="pb-4">

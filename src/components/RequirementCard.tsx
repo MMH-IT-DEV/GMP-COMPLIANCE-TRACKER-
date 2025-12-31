@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Requirement } from '@/lib/checklist-data';
 import { StatusBadge } from './StatusBadge';
 import { useDiscussion } from '@/context/DiscussionContext';
+import { supabase } from '@/lib/supabase';
 
 interface RequirementCardProps {
     requirement: Requirement;
@@ -25,6 +26,7 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
     onCompleteChange,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [lastMessages, setLastMessages] = useState<any[]>([]);
     const { openDiscussion } = useDiscussion();
 
     const getPriorityColor = (priority: string) => {
@@ -35,6 +37,45 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
             default: return 'text-text-muted';
         }
     };
+
+    // Fetch last 2 messages for preview
+    useEffect(() => {
+        if (!isExpanded) return;
+
+        const fetchLastMessages = async () => {
+            const { data, error } = await supabase
+                .from('gmp_messages')
+                .select('*')
+                .eq('item_id', requirement.id)
+                .order('created_at', { ascending: false })
+                .limit(2);
+
+            if (data && !error) {
+                setLastMessages(data.reverse());
+            }
+        };
+
+        fetchLastMessages();
+
+        // Real-time update for preview
+        const channel = supabase
+            .channel(`preview_${requirement.id}`)
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'gmp_messages', filter: `item_id=eq.${requirement.id}` },
+                (payload) => {
+                    setLastMessages(prev => {
+                        const next = [...prev, payload.new];
+                        return next.length > 2 ? next.slice(-2) : next;
+                    });
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [isExpanded, requirement.id]);
 
     return (
         <div className={`border rounded-lg mb-4 overflow-hidden transition-all duration-300 ${isComplete
@@ -93,9 +134,31 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
 
             {isExpanded && (
                 <div className="px-6 pb-6 border-t border-border/50 bg-slate-50/5 pt-6 space-y-6">
+                    <div className="flex items-center gap-4 mb-2">
+                        <div className="flex-1">
+                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">Implementation Status</p>
+                            <div className="flex gap-2">
+                                {(['have', 'partial', 'need'] as const).map((s) => (
+                                    <button
+                                        key={s}
+                                        onClick={() => onStatusChange(s)}
+                                        className={`px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all border ${status === s
+                                                ? s === 'have' ? 'bg-success text-white border-success' :
+                                                    s === 'partial' ? 'bg-warning text-white border-warning' :
+                                                        'bg-error text-white border-error'
+                                                : 'bg-white text-text-muted border-border hover:border-text-muted'
+                                            }`}
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                     {requirement.description && (
-                        <div className="rounded-lg border border-border/50 overflow-hidden bg-white">
-                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
+                        <div className="rounded-lg border border-border/50 overflow-hidden bg-white shadow-sm">
+                            <div className="bg-slate-50/50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
                                 <div className="w-0.5 h-3 bg-blue rounded-full" />
                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                     💡 What This Means
@@ -110,8 +173,8 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                     )}
 
                     {requirement.regulatoryQuote && (
-                        <div className="rounded-lg border border-border/50 overflow-hidden bg-white">
-                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex justify-between items-center">
+                        <div className="rounded-lg border border-border/50 overflow-hidden bg-white shadow-sm">
+                            <div className="bg-slate-50/50 px-4 py-2 border-b border-border/50 flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <div className="w-0.5 h-3 bg-terracotta rounded-full" />
                                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -122,7 +185,7 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                                     {requirement.source} ↗
                                 </a>
                             </div>
-                            <div className="p-4 bg-slate-50/20">
+                            <div className="p-4 bg-slate-50/10">
                                 <p className="text-sm italic text-text-secondary leading-relaxed">
                                     "{requirement.regulatoryQuote}"
                                 </p>
@@ -131,8 +194,8 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                     )}
 
                     {requirement.tables && requirement.tables.map((table, tIdx) => (
-                        <div key={tIdx} className="rounded-lg border border-border/50 overflow-hidden bg-white">
-                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
+                        <div key={tIdx} className="rounded-lg border border-border/50 overflow-hidden bg-white shadow-sm">
+                            <div className="bg-slate-50/50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
                                 <div className="w-0.5 h-3 bg-olive rounded-full" />
                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{table.title}</span>
                             </div>
@@ -161,14 +224,14 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {requirement.compliantExample && (
-                            <div className="p-4 bg-success/5 rounded-lg border border-success/20 relative overflow-hidden group/example">
+                            <div className="p-4 bg-success/5 rounded-lg border border-success/20 relative overflow-hidden group/example shadow-sm">
                                 <div className="absolute top-0 left-0 w-0.5 h-full bg-success opacity-40" />
                                 <span className="text-[10px] font-bold text-success uppercase tracking-widest block mb-1">✓ Compliant</span>
                                 <p className="text-xs text-text-secondary leading-relaxed">{requirement.compliantExample}</p>
                             </div>
                         )}
                         {requirement.nonCompliantExample && (
-                            <div className="p-4 bg-error/5 rounded-lg border border-error/20 relative overflow-hidden group/example">
+                            <div className="p-4 bg-error/5 rounded-lg border border-error/20 relative overflow-hidden group/example shadow-sm">
                                 <div className="absolute top-0 left-0 w-0.5 h-full bg-error opacity-40" />
                                 <span className="text-[10px] font-bold text-error uppercase tracking-widest block mb-1">✗ Non-Compliant</span>
                                 <p className="text-xs text-text-secondary leading-relaxed">{requirement.nonCompliantExample}</p>
@@ -176,8 +239,8 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                         )}
                     </div>
 
-                    <div className="rounded-lg border border-border/50 overflow-hidden bg-white">
-                        <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
+                    <div className="rounded-lg border border-border/50 overflow-hidden bg-white shadow-sm">
+                        <div className="bg-slate-50/50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
                             <div className="w-0.5 h-3 bg-warning rounded-full" />
                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                 📋 Evidence Needed
@@ -196,29 +259,38 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                     </div>
 
                     <div className="pt-2">
-                        <div className="rounded-lg border border-border/50 overflow-hidden bg-white focus-within:ring-1 focus-within:ring-olive/20 transition-all">
-                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center justify-between">
+                        <div className="rounded-lg border border-border transition-all shadow-sm">
+                            <div className="bg-slate-50/50 px-4 py-2 border-b border-border flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-0.5 h-3 bg-slate-300 rounded-full" />
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                        📝 Notes
+                                    <div className="w-0.5 h-3 bg-slate-400 rounded-full" />
+                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                                        📝 Discussion Preview
                                     </span>
                                 </div>
                                 <button
                                     onClick={() => openDiscussion(requirement.id, requirement.title)}
-                                    className="p-1.5 text-text-muted hover:text-olive hover:bg-olive/5 transition-all rounded-md flex items-center gap-1.5 group"
-                                    title="Open Discussion"
+                                    className="p-1.5 text-olive hover:bg-olive/10 transition-all rounded-md flex items-center gap-1.5 group font-bold text-[10px] uppercase tracking-wider"
+                                    title="Open Full Chat"
                                 >
-                                    <span className="text-[9px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Discuss</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+                                    <span>Expand Discussion</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18 6-6-6-6" /><path d="M3 12h18" /></svg>
                                 </button>
                             </div>
-                            <textarea
-                                value={notes}
-                                onChange={(e) => onNotesChange(e.target.value)}
-                                placeholder="Add your progress notes here..."
-                                className="w-full bg-white border-none p-4 text-sm text-text-primary focus:ring-0 outline-none h-32 resize-none transition-all placeholder:text-text-muted/40"
-                            />
+                            <div className="p-4 bg-white min-h-[100px] flex flex-col justify-center gap-4">
+                                {lastMessages.length === 0 ? (
+                                    <p className="text-xs text-text-muted italic text-center py-4">No recent messages. Click 'Expand Discussion' to start the conversation.</p>
+                                ) : (
+                                    lastMessages.map((msg, mIdx) => (
+                                        <div key={mIdx} className="space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-bold text-[11px] text-text-primary">{msg.user_name}</span>
+                                                <span className="text-[9px] text-text-muted">({new Date(msg.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })})</span>
+                                            </div>
+                                            <p className="text-xs text-text-secondary pl-3 border-l-2 border-border/60">{msg.message}</p>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
