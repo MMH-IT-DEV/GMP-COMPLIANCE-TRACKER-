@@ -2,15 +2,18 @@
 
 import React, { useState } from 'react';
 import { Sidebar } from "@/components/Sidebar";
+import { DiscussionPanel } from "@/components/DiscussionPanel";
+import { useDiscussion } from "@/context/DiscussionContext";
 
 export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { isOpen: isDiscussionOpen } = useDiscussion();
 
     return (
-        <div className="flex min-h-screen relative">
+        <div className="flex min-h-screen relative bg-background overflow-hidden font-sans antialiased text-text-primary">
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-            <main className="flex-1 overflow-x-hidden">
+            <main className={`flex-1 transition-all duration-300 relative ${isDiscussionOpen ? 'lg:mr-0' : ''}`}>
                 {/* Mobile Header */}
                 <div className="lg:hidden sticky top-0 left-0 right-0 h-14 bg-card-bg/80 backdrop-blur-md border-b border-border z-30 flex items-center px-4">
                     <button
@@ -23,10 +26,12 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
                     <div className="ml-2 font-black text-[10px] text-text-muted uppercase tracking-[0.2em]">Compliance Checklists</div>
                 </div>
 
-                <div className="min-h-screen">
+                <div className="min-h-screen overflow-y-auto">
                     {children}
                 </div>
             </main>
+
+            <DiscussionPanel />
         </div>
     );
 };

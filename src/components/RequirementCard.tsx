@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Requirement } from '@/lib/checklist-data';
 import { StatusBadge } from './StatusBadge';
+import { useDiscussion } from '@/context/DiscussionContext';
 
 interface RequirementCardProps {
     requirement: Requirement;
@@ -24,6 +25,7 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
     onCompleteChange,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const { openDiscussion } = useDiscussion();
 
     const getPriorityColor = (priority: string) => {
         switch (priority) {
@@ -195,11 +197,21 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
 
                     <div className="pt-2">
                         <div className="rounded-lg border border-border/50 overflow-hidden bg-white focus-within:ring-1 focus-within:ring-olive/20 transition-all">
-                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
-                                <div className="w-0.5 h-3 bg-slate-300 rounded-full" />
-                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                    📝 Notes
-                                </span>
+                            <div className="bg-slate-50 px-4 py-2 border-b border-border/50 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-0.5 h-3 bg-slate-300 rounded-full" />
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        📝 Notes
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => openDiscussion(requirement.id, requirement.title)}
+                                    className="p-1.5 text-text-muted hover:text-olive hover:bg-olive/5 transition-all rounded-md flex items-center gap-1.5 group"
+                                    title="Open Discussion"
+                                >
+                                    <span className="text-[9px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Discuss</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+                                </button>
                             </div>
                             <textarea
                                 value={notes}

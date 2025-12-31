@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Internal tracking tool for Health Canada GMP compliance.",
 };
 
+import { DiscussionProvider } from "@/context/DiscussionContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased text-text-primary bg-background`}>
-        <MainLayout>
-          {children}
-        </MainLayout>
+        <DiscussionProvider>
+          <MainLayout>
+            {children}
+          </MainLayout>
+        </DiscussionProvider>
       </body>
     </html>
   );
