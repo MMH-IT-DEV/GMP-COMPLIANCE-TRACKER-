@@ -5,6 +5,7 @@ import { Requirement } from '@/lib/checklist-data';
 import { StatusBadge } from './StatusBadge';
 import { useDiscussion } from '@/context/DiscussionContext';
 import { supabase } from '@/lib/supabase';
+import { MarkdownText } from './MarkdownText';
 
 interface RequirementCardProps {
     requirement: Requirement;
@@ -286,7 +287,9 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
                                                 <span className="font-bold text-[11px] text-text-primary">{msg.user_name}</span>
                                                 <span className="text-[9px] text-text-muted">({new Date(msg.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })})</span>
                                             </div>
-                                            <p className="text-xs text-text-secondary pl-3 border-l-2 border-border/60">{msg.message}</p>
+                                            <div className="text-xs text-text-secondary pl-3 border-l-2 border-border/60">
+                                                <MarkdownText text={msg.message} />
+                                            </div>
                                         </div>
                                     ))
                                 )}

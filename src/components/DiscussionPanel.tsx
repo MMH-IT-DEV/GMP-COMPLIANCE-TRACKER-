@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useDiscussion } from '@/context/DiscussionContext';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { MarkdownText } from './MarkdownText';
+import { Bold, Italic, Strikethrough, Link as LinkIcon, Send, X, User, Smile, Paperclip } from 'lucide-react';
 
 interface Message {
     id: string;
@@ -25,7 +25,6 @@ export const DiscussionPanel: React.FC = () => {
     const [isResizing, setIsResizing] = useState(false);
     const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
     const [editContent, setEditContent] = useState('');
-    const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const rafId = useRef<number | null>(null);
@@ -115,8 +114,6 @@ export const DiscussionPanel: React.FC = () => {
                         });
                     } else if (payload.eventType === 'UPDATE') {
                         setMessages(prev => prev.map(m => m.id === payload.new.id ? payload.new as Message : m));
-                    } else if (payload.eventType === 'DELETE') {
-                        setMessages(prev => prev.filter(m => m.id !== payload.old.id));
                     }
                 }
             )
@@ -209,9 +206,15 @@ export const DiscussionPanel: React.FC = () => {
         setNewMessage(newText);
 
         setTimeout(() => {
-            textareaRef.current?.focus();
-            const newCursorPos = start + prefix.length + selectedText.length + suffix.length;
-            textareaRef.current?.setSelectionRange(newCursorPos, newCursorPos);
+            if (!textareaRef.current) return;
+            textareaRef.current.focus();
+            if (start === end) {
+                const newPos = start + prefix.length;
+                textareaRef.current.setSelectionRange(newPos, newPos);
+            } else {
+                const newPos = before.length + prefix.length + selectedText.length + suffix.length;
+                textareaRef.current.setSelectionRange(newPos, newPos);
+            }
         }, 0);
     };
 
@@ -230,10 +233,9 @@ export const DiscussionPanel: React.FC = () => {
     return (
         <div
             ref={panelRef}
-            className="fixed top-0 right-0 h-full bg-card-bg border-l border-border z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out"
+            className="fixed top-0 right-0 h-full bg-card-bg border-l border-border z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out font-sans"
             style={{ width: `${width}px` }}
         >
-            {/* Resize handle */}
             <div className="absolute top-0 left-[-6px] w-[12px] h-full cursor-ew-resize group z-[60]" onMouseDown={startResizing}>
                 <div className="w-[2px] h-full mx-auto bg-transparent group-hover:bg-olive/40 transition-colors" />
             </div>
@@ -243,17 +245,18 @@ export const DiscussionPanel: React.FC = () => {
                 <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-base text-text-primary truncate pr-4">{activeItemTitle || 'Discussion'}</h3>
                     <div className="flex items-center gap-2 mt-0.5">
-                        <div className="w-2 h-2 rounded-full bg-success"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
                         <button onClick={() => {
                             const newName = prompt('Update your display name:', userName);
                             if (newName && newName.trim()) saveUserName(newName.trim());
-                        }} className="text-[11px] text-text-muted hover:text-text-primary transition-colors font-medium">
+                        }} className="text-[11px] text-text-muted hover:text-text-primary transition-colors font-medium flex items-center gap-1">
+                            <User size={10} />
                             {userName ? `Posting as ${userName}` : 'Anonymous User'}
                         </button>
                     </div>
                 </div>
                 <button onClick={closeDiscussion} className="p-2 text-text-muted hover:text-text-primary hover:bg-background rounded-lg transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                    <X size={20} />
                 </button>
             </div>
 
@@ -262,7 +265,7 @@ export const DiscussionPanel: React.FC = () => {
                 {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-8 text-text-muted">
                         <div className="w-16 h-16 rounded-2xl bg-background flex items-center justify-center mb-4 border border-border">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                            <Smile size={32} strokeWidth={1.5} />
                         </div>
                         <p className="text-sm font-semibold text-text-secondary">No messages yet</p>
                     </div>
@@ -276,7 +279,7 @@ export const DiscussionPanel: React.FC = () => {
                                 <div key={msg.id} className={`group px-6 py-1.5 hover:bg-slate-50 relative transition-colors ${showAvatar ? 'mt-4' : ''}`}>
                                     <div className="flex gap-4">
                                         {showAvatar ? (
-                                            <div className={`w-9 h-9 rounded-lg ${getAvatarColor(msg.user_name)} flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm`}>
+                                            <div className={`w-9 h-9 rounded-lg ${getAvatarColor(msg.user_name)} flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm transition-transform active:scale-95 cursor-pointer`}>
                                                 {getInitials(msg.user_name)}
                                             </div>
                                         ) : (
@@ -289,7 +292,7 @@ export const DiscussionPanel: React.FC = () => {
                                         <div className="flex-1 min-w-0">
                                             {showAvatar && (
                                                 <div className="flex items-baseline gap-2 mb-0.5">
-                                                    <span className="font-bold text-[14px] text-text-primary">{msg.user_name}</span>
+                                                    <span className="font-bold text-[14px] text-text-primary hover:underline cursor-pointer">{msg.user_name}</span>
                                                     <span className="text-[11px] text-text-muted">
                                                         {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </span>
@@ -310,33 +313,32 @@ export const DiscussionPanel: React.FC = () => {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className={`text-[14px] leading-relaxed break-words ${msg.is_deleted ? 'text-text-muted italic' : 'text-text-secondary'} prose prose-sm max-w-none`}>
+                                                <div className={`text-[14px] leading-relaxed break-words ${msg.is_deleted ? 'text-text-muted italic' : 'text-text-secondary'}`}>
                                                     {msg.is_deleted ? (
                                                         'Message deleted'
                                                     ) : (
-                                                        <>
-                                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.message}</ReactMarkdown>
+                                                        <div className="inline">
+                                                            <MarkdownText text={msg.message} className="inline" />
                                                             {msg.is_edited && <span className="text-[10px] text-text-muted ml-1">(edited)</span>}
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Action Menu for Own Messages */}
                                     {isOwnMessage && !msg.is_deleted && editingMessageId !== msg.id && (
-                                        <div className="absolute top-1 right-6 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                        <div className="absolute top-1 right-6 opacity-0 group-hover:opacity-100 transition-opacity flex gap-0.5 bg-white border border-border shadow-sm rounded p-0.5 z-10">
                                             <button
                                                 onClick={() => { setEditingMessageId(msg.id); setEditContent(msg.message); }}
-                                                className="p-1.5 hover:bg-slate-200 rounded text-text-muted transition-colors"
+                                                className="p-1.5 hover:bg-slate-100 rounded text-text-muted hover:text-olive transition-colors"
                                                 title="Edit"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></svg>
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteMessage(msg.id)}
-                                                className="p-1.5 hover:bg-slate-200 rounded text-text-muted hover:text-error transition-colors"
+                                                className="p-1.5 hover:bg-slate-100 rounded text-text-muted hover:text-error transition-colors"
                                                 title="Delete"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
@@ -353,15 +355,46 @@ export const DiscussionPanel: React.FC = () => {
 
             {/* Input area */}
             <div className="px-6 pb-6 pt-2 bg-card-bg border-t border-border/50">
-                <div className="border border-border rounded-xl bg-background overflow-hidden focus-within:border-olive/50 transition-colors group shadow-sm">
+                <div className="border border-border rounded-xl bg-background overflow-hidden focus-within:border-olive/50 focus-within:shadow-md transition-all group">
                     <div className="flex flex-col">
-                        {/* Formatting Toolbar */}
-                        <div className="px-3 py-2 flex gap-1 border-b border-border bg-slate-50/50">
-                            <button onClick={() => insertFormatting('**')} className="w-8 h-8 rounded hover:bg-border/50 flex items-center justify-center text-xs font-bold" title="Bold">B</button>
-                            <button onClick={() => insertFormatting('*')} className="w-8 h-8 rounded hover:bg-border/50 flex items-center justify-center text-xs italic" title="Italic">I</button>
-                            <button onClick={() => insertFormatting('~~')} className="w-8 h-8 rounded hover:bg-border/50 flex items-center justify-center text-xs line-through" title="Strikethrough">S</button>
+                        {/* Styled Formatting Toolbar - Lucide Icons */}
+                        <div className="px-2 py-1 flex gap-0.5 border-b border-border bg-slate-50/50">
+                            <button
+                                onClick={() => insertFormatting('**')}
+                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                title="Bold"
+                            >
+                                <Bold size={16} strokeWidth={2.5} />
+                            </button>
+                            <button
+                                onClick={() => insertFormatting('*')}
+                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                title="Italic"
+                            >
+                                <Italic size={16} strokeWidth={2.5} />
+                            </button>
+                            <button
+                                onClick={() => insertFormatting('~~')}
+                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                title="Strikethrough"
+                            >
+                                <Strikethrough size={16} strokeWidth={2.5} />
+                            </button>
                             <div className="border-r border-border h-4 my-auto mx-1"></div>
-                            <button onClick={() => insertFormatting('[', '](url)')} className="w-8 h-8 rounded hover:bg-border/50 flex items-center justify-center text-sm" title="Link">🔗</button>
+                            <button
+                                onClick={() => insertFormatting('[', '](url)')}
+                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                title="Link"
+                            >
+                                <LinkIcon size={16} strokeWidth={2.5} />
+                            </button>
+                            <div className="flex-1"></div>
+                            <button className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors" title="Emoji">
+                                <Smile size={16} strokeWidth={2} />
+                            </button>
+                            <button className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors" title="Attach">
+                                <Paperclip size={16} strokeWidth={2} />
+                            </button>
                         </div>
 
                         <form onSubmit={handleSendMessage} className="relative p-1">
@@ -378,17 +411,20 @@ export const DiscussionPanel: React.FC = () => {
                                 placeholder={`Message ${activeItemTitle}...`}
                                 className="w-full bg-transparent border-none px-4 py-3 text-[14px] text-text-primary placeholder:text-text-muted/60 focus:ring-0 outline-none resize-none h-24"
                             />
-                            <div className="flex justify-between items-center px-3 pb-2">
-                                <div className="text-[10px] text-text-muted flex gap-2">
-                                    <span><b>Enter</b> to send</span>
-                                    <span><b>Shift+Enter</b> for new line</span>
+                            <div className="flex justify-between items-center px-4 pb-2">
+                                <div className="text-[10px] text-text-muted/60 font-medium">
+                                    Press <kbd className="font-sans border border-border px-1 rounded bg-slate-50">Enter</kbd> to send
                                 </div>
                                 <button
                                     type="submit"
                                     disabled={!newMessage.trim()}
-                                    className={`p-2 rounded-lg transition-all ${newMessage.trim() ? 'bg-olive text-white shadow-md hover:bg-olive/90' : 'bg-background text-text-muted opacity-50'}`}
+                                    className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-xs transition-all ${newMessage.trim()
+                                            ? 'bg-olive text-white shadow-sm hover:shadow-md hover:translate-y-[-1px] active:translate-y-[0px]'
+                                            : 'bg-slate-100 text-text-muted/40 cursor-not-allowed'
+                                        }`}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+                                    <span>Send</span>
+                                    <Send size={14} fill={newMessage.trim() ? "currentColor" : "none"} />
                                 </button>
                             </div>
                         </form>
