@@ -74,8 +74,8 @@ export const checklists: Checklist[] = [
                         description: 'A documented list of every computerized system used in GMP activities — software, databases, cloud services. Inspectors typically ask to see this first.',
                         priority: 'high',
                         regulatoryQuote: '"An up-to-date listing of all relevant systems and their GMP functionality (inventory) should be available."',
-                        source: 'GUI-0050 A 4.4.3',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-products/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.4',
+                        source: 'GUI-0050 A 4.4',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.4',
                         tables: [
                             {
                                 title: 'Required Information Per System',
@@ -304,8 +304,8 @@ export const checklists: Checklist[] = [
                         description: 'A short document listing which systems are backed up, how often, and where the copies are stored.',
                         priority: 'high',
                         regulatoryQuote: '"Regular backups of all relevant data should be done."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.7.2',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.7',
                         tables: [
                             {
                                 title: 'What Your SOP Should Cover',
@@ -330,8 +330,8 @@ export const checklists: Checklist[] = [
                         description: 'Having a backup SOP is not enough. You need proof that backups are actually running systematically.',
                         priority: 'high',
                         regulatoryQuote: '"The backup process should be verified to be working correctly at periodic intervals."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.7.2',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.7',
                         tables: [
                             {
                                 title: 'Backup Evidence',
@@ -356,8 +356,8 @@ export const checklists: Checklist[] = [
                         description: 'If a fire or theft affects your facility, your backups should survive. Store them at a separate and secure location.',
                         priority: 'high',
                         regulatoryQuote: '"Backup data should be stored at a separate and secure location."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.7.2',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.7',
                         tables: [
                             {
                                 title: 'Acceptable Locations',
@@ -388,8 +388,8 @@ export const checklists: Checklist[] = [
                         description: 'A backup is worthless if you can\'t restore it. Test the restoration process at least once a year.',
                         priority: 'medium',
                         regulatoryQuote: '"The backup process should be verified to be working correctly at periodic intervals."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.7.2',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.7',
                         tables: [
                             {
                                 title: 'Recommended Testing Frequency',
@@ -413,8 +413,8 @@ export const checklists: Checklist[] = [
                         description: 'GMP records must be kept for specific periods. Your backups must cover these timeframes (usually 1 year past product expiry).',
                         priority: 'medium',
                         regulatoryQuote: '"Backup data should be stored... for the period of time specified for the type of data."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
+                        source: 'GUI-0050 A 4.7.2',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.7',
                         tables: [
                             {
                                 title: 'Minimum Retention',
@@ -509,8 +509,8 @@ export const checklists: Checklist[] = [
                         description: 'A short document explaining how your company manages electronic GMP records.',
                         priority: 'high',
                         regulatoryQuote: '"When electronic systems are used to record data, there should be written procedures for the operation and maintenance of the system."',
-                        source: 'GUI-0158 §6.11',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.11',
+                        source: 'GUI-0158 Sections 53-58',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'What Your SOP Should Cover',
@@ -536,8 +536,8 @@ export const checklists: Checklist[] = [
                         description: 'Inspectors may ask to see a printed copy of any record. You need to be able to export or print from each system.',
                         priority: 'high',
                         regulatoryQuote: '"Electronic records should be protected by being reliable, accessible and stored appropriately such that they can be printed when required."',
-                        source: 'GUI-0158 §6.11',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.11',
+                        source: 'GUI-0158 Sections 53-58',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'How to Print From Each System',
@@ -568,8 +568,8 @@ export const checklists: Checklist[] = [
                         description: 'An "electronic signature" is proof that a specific person approved something. Logging in and clicking "Approve" counts — no fancy digital signatures needed.',
                         priority: 'medium',
                         regulatoryQuote: '"Electronic signature systems should be tested for their security and ability to confirm that the signature is valid and reliable."',
-                        source: 'GUI-0158 §6.11',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.11',
+                        source: 'GUI-0158 Sections 53-58',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'What Counts as Electronic Signature',
@@ -594,8 +594,8 @@ export const checklists: Checklist[] = [
                         description: 'When documents are updated, people should only use the current version. Old versions should be archived, not deleted.',
                         priority: 'medium',
                         regulatoryQuote: '"Version controls should be used, where necessary, to prevent use of outdated documents."',
-                        source: 'GUI-0158 §6.11',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.11',
+                        source: 'GUI-0158 Sections 53-58',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Ways to Manage Versions',
@@ -690,8 +690,8 @@ export const checklists: Checklist[] = [
                         description: 'Every customer complaint must be recorded with enough detail to investigate.',
                         priority: 'high',
                         regulatoryQuote: '"Written records of all complaints should be retained."',
-                        source: 'GUI-0158 §6.6',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.6',
+                        source: 'GUI-0158 Section 51',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/section-51.html',
                         tables: [
                             {
                                 title: 'Required Fields',
@@ -717,8 +717,8 @@ export const checklists: Checklist[] = [
                         description: 'If you discover a problem with a batch (contamination, wrong ingredient, labeling error), you must be able to contact every customer who received that batch within 24-48 hours.',
                         priority: 'high',
                         regulatoryQuote: '"Distribution records should contain sufficient information to enable the recall of any lot."',
-                        source: 'GUI-0158 §6.7',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.7',
+                        source: 'GUI-0158 Section 53(h)',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Required Fields (Per GUI-0158 A 6.7)',
@@ -762,8 +762,8 @@ export const checklists: Checklist[] = [
                         description: 'If a customer reports a health problem from your product, record it and possibly report to Health Canada.',
                         priority: 'medium',
                         regulatoryQuote: '"All adverse reactions to NHPs should be recorded and evaluated."',
-                        source: 'GUI-0158 §6.10',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.10',
+                        source: 'GUI-0158 Section 52',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a52',
                         tables: [
                             {
                                 title: 'When to Report to Health Canada',
@@ -786,8 +786,8 @@ export const checklists: Checklist[] = [
                         description: 'Customer info in complaints, orders, and adverse reactions should be protected from unauthorized access.',
                         priority: 'medium',
                         regulatoryQuote: '',
-                        source: 'GUI-0158 §6.11',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.11',
+                        source: 'GUI-0158 Sections 53-58',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Protection Checklist',
@@ -857,8 +857,8 @@ export const checklists: Checklist[] = [
                         description: 'Record data as you do the work. Don\'t fill in batch records at the end of the day or next morning from memory.',
                         priority: 'high',
                         regulatoryQuote: '"Records should be made at the time each action is taken."',
-                        source: 'GUI-0158 §6.5',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
+                        source: 'GUI-0158 Sections 53-58 (GDP)',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Examples',
@@ -883,8 +883,8 @@ export const checklists: Checklist[] = [
                         description: 'When you make a mistake, draw a single line through it so the original is still readable. Add your initials, date, and the correct value.',
                         priority: 'high',
                         regulatoryQuote: '"Any alteration made to records should be signed or initialed and dated; the alteration should permit the reading of the original information."',
-                        source: 'GUI-0158 §6.5',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
+                        source: 'GUI-0158 Sections 53-58 (GDP)',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Examples',
@@ -916,8 +916,8 @@ export const checklists: Checklist[] = [
                         description: 'Records must be readable by anyone, not just the person who wrote them. Use clear handwriting or typed entries.',
                         priority: 'medium',
                         regulatoryQuote: '"Records should be clear, legible, indelible and readily available."',
-                        source: 'GUI-0158 §6.5',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
+                        source: 'GUI-0158 Sections 53-58 (GDP)',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Legibility Checklist',
@@ -942,8 +942,8 @@ export const checklists: Checklist[] = [
                         description: 'Original records are the "source of truth." Never delete them — keep originals and make corrections visible.',
                         priority: 'medium',
                         regulatoryQuote: '"For the protection of data, measures should be provided against deliberate or inadvertent data changes."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.9',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.9',
                         tables: [
                             {
                                 title: 'Examples',
@@ -968,8 +968,8 @@ export const checklists: Checklist[] = [
                         description: 'Critical data should be checked by a second person or reviewed before the record is finalized.',
                         priority: 'medium',
                         regulatoryQuote: '"There should be recorded evidence that data has been checked for relevance, correctness, and consistency."',
-                        source: 'GUI-0050 A 4.8',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.8',
+                        source: 'GUI-0050 A 4.6',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/annex-11-guide-computerized-systems-gui-0050.html#a4.6',
                         tables: [
                             {
                                 title: 'Verification Methods',
@@ -1000,8 +1000,8 @@ export const checklists: Checklist[] = [
                         description: 'Every field in a record should be filled in. If something doesn\'t apply, write "N/A" — don\'t leave it blank.',
                         priority: 'low',
                         regulatoryQuote: '',
-                        source: 'GUI-0158 §6.5',
-                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-health-products/legislation-guidelines/guidance-documents/good-manufacturing-practices.html#a6.5',
+                        source: 'GUI-0158 Sections 53-58 (GDP)',
+                        sourceUrl: 'https://www.canada.ca/en/health-canada/services/drugs-health-products/compliance-enforcement/good-manufacturing-practices/guidance-documents/guide-natural-health-products-0158/sections-52-62.html#a53',
                         tables: [
                             {
                                 title: 'Handling Blank Fields',
