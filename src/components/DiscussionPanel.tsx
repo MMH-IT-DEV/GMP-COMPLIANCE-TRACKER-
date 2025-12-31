@@ -5,6 +5,10 @@ import { supabase } from '@/lib/supabase';
 import { useDiscussion } from '@/context/DiscussionContext';
 import { MarkdownText } from './MarkdownText';
 import { Bold, Italic, Strikethrough, Link as LinkIcon, Send, X, User, Smile, Paperclip } from 'lucide-react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
 
 interface Message {
     id: string;
@@ -19,7 +23,6 @@ interface Message {
 export const DiscussionPanel: React.FC = () => {
     const { activeItemId, activeItemTitle, isOpen, closeDiscussion } = useDiscussion();
     const [messages, setMessages] = useState<Message[]>([]);
-    const [newMessage, setNewMessage] = useState('');
     const [userName, setUserName] = useState<string>('');
     const [width, setWidth] = useState(400);
     const [isResizing, setIsResizing] = useState(false);
@@ -28,7 +31,6 @@ export const DiscussionPanel: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const rafId = useRef<number | null>(null);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // Initial load of user name
     useEffect(() => {
@@ -40,6 +42,31 @@ export const DiscussionPanel: React.FC = () => {
         setUserName(name);
         localStorage.setItem('gmp_user_name', name);
     };
+
+    // Tiptap Editor Initialization
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: 'text-blue hover:underline cursor-pointer',
+                },
+            }),
+            Placeholder.configure({
+                placeholder: `Message ${activeItemTitle || 'this requirement'}...`,
+            }),
+        ],
+        content: '',
+        onUpdate: ({ editor }) => {
+            // Keep content updated if needed
+        },
+        editorProps: {
+            attributes: {
+                class: 'prose prose-sm focus:outline-none max-w-none px-4 py-3 min-h-[100px] text-[14px] text-text-primary',
+            },
+        },
+    }, [activeItemId]); // Re-init on item change to update placeholder
 
     // Resizing logic
     const startResizing = useCallback((e: React.MouseEvent) => {
@@ -133,8 +160,10 @@ export const DiscussionPanel: React.FC = () => {
 
     const handleSendMessage = async (e?: React.FormEvent) => {
         e?.preventDefault();
-        const trimmedMessage = newMessage.trim();
-        if (!trimmedMessage || !activeItemId) return;
+        if (!editor || editor.isEmpty) return;
+
+        const htmlContent = editor.getHTML();
+        if (!activeItemId) return;
 
         let currentUserName = userName;
         if (!currentUserName) {
@@ -144,19 +173,19 @@ export const DiscussionPanel: React.FC = () => {
             saveUserName(currentUserName);
         }
 
-        setNewMessage('');
+        editor.commands.clearContent();
 
         const { error } = await supabase
             .from('gmp_messages')
             .insert([{
                 item_id: activeItemId,
                 user_name: currentUserName,
-                message: trimmedMessage
+                message: htmlContent
             }]);
 
         if (error) {
             console.error('Error sending message:', error);
-            setNewMessage(trimmedMessage);
+            editor.commands.setContent(htmlContent);
             alert('Failed to send message.');
         }
     };
@@ -184,38 +213,13 @@ export const DiscussionPanel: React.FC = () => {
 
         const { error } = await supabase
             .from('gmp_messages')
-            .update({ is_deleted: true, message: 'Message deleted' })
+            .update({ is_deleted: true, message: '<em>Message deleted</em>' })
             .eq('id', msgId);
 
         if (error) {
             console.error('Error deleting message:', error);
             alert('Failed to delete message.');
         }
-    };
-
-    const insertFormatting = (prefix: string, suffix: string = prefix) => {
-        if (!textareaRef.current) return;
-        const start = textareaRef.current.selectionStart;
-        const end = textareaRef.current.selectionEnd;
-        const text = newMessage;
-        const selectedText = text.substring(start, end);
-        const before = text.substring(0, start);
-        const after = text.substring(end);
-
-        const newText = before + prefix + selectedText + suffix + after;
-        setNewMessage(newText);
-
-        setTimeout(() => {
-            if (!textareaRef.current) return;
-            textareaRef.current.focus();
-            if (start === end) {
-                const newPos = start + prefix.length;
-                textareaRef.current.setSelectionRange(newPos, newPos);
-            } else {
-                const newPos = before.length + prefix.length + selectedText.length + suffix.length;
-                textareaRef.current.setSelectionRange(newPos, newPos);
-            }
-        }, 0);
     };
 
     const getInitials = (name: string) => {
@@ -227,6 +231,20 @@ export const DiscussionPanel: React.FC = () => {
         const colors = ['bg-olive', 'bg-blue', 'bg-terracotta', 'bg-success', 'bg-warning', 'bg-error', 'bg-slate-500', 'bg-[#6366f1]'];
         return colors[Math.abs(hash) % colors.length];
     };
+
+    const setLink = useCallback(() => {
+        if (!editor) return;
+        const previousUrl = editor.getAttributes('link').href;
+        const url = window.prompt('URL', previousUrl);
+
+        if (url === null) return;
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }, [editor]);
 
     if (!isOpen) return null;
 
@@ -314,14 +332,10 @@ export const DiscussionPanel: React.FC = () => {
                                                 </div>
                                             ) : (
                                                 <div className={`text-[14px] leading-relaxed break-words ${msg.is_deleted ? 'text-text-muted italic' : 'text-text-secondary'}`}>
-                                                    {msg.is_deleted ? (
-                                                        'Message deleted'
-                                                    ) : (
-                                                        <div className="inline">
-                                                            <MarkdownText text={msg.message} className="inline" />
-                                                            {msg.is_edited && <span className="text-[10px] text-text-muted ml-1">(edited)</span>}
-                                                        </div>
-                                                    )}
+                                                    <div className="inline">
+                                                        <MarkdownText text={msg.message} className="inline" />
+                                                        {msg.is_edited && <span className="text-[10px] text-text-muted ml-1">(edited)</span>}
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
@@ -353,37 +367,37 @@ export const DiscussionPanel: React.FC = () => {
                 )}
             </div>
 
-            {/* Input area */}
+            {/* Input area - Tiptap Implementation */}
             <div className="px-6 pb-6 pt-2 bg-card-bg border-t border-border/50">
                 <div className="border border-border rounded-xl bg-background overflow-hidden focus-within:border-olive/50 focus-within:shadow-md transition-all group">
                     <div className="flex flex-col">
-                        {/* Styled Formatting Toolbar - Lucide Icons */}
+                        {/* Styled Formatting Toolbar */}
                         <div className="px-2 py-1 flex gap-0.5 border-b border-border bg-slate-50/50">
                             <button
-                                onClick={() => insertFormatting('**')}
-                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                onClick={() => editor?.chain().focus().toggleBold().run()}
+                                className={`w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center transition-colors ${editor?.isActive('bold') ? 'bg-slate-200/80 text-olive' : 'text-text-muted'}`}
                                 title="Bold"
                             >
                                 <Bold size={16} strokeWidth={2.5} />
                             </button>
                             <button
-                                onClick={() => insertFormatting('*')}
-                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                onClick={() => editor?.chain().focus().toggleItalic().run()}
+                                className={`w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center transition-colors ${editor?.isActive('italic') ? 'bg-slate-200/80 text-olive' : 'text-text-muted'}`}
                                 title="Italic"
                             >
                                 <Italic size={16} strokeWidth={2.5} />
                             </button>
                             <button
-                                onClick={() => insertFormatting('~~')}
-                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                onClick={() => editor?.chain().focus().toggleStrike().run()}
+                                className={`w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center transition-colors ${editor?.isActive('strike') ? 'bg-slate-200/80 text-olive' : 'text-text-muted'}`}
                                 title="Strikethrough"
                             >
                                 <Strikethrough size={16} strokeWidth={2.5} />
                             </button>
                             <div className="border-r border-border h-4 my-auto mx-1"></div>
                             <button
-                                onClick={() => insertFormatting('[', '](url)')}
-                                className="w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                                onClick={setLink}
+                                className={`w-8 h-8 rounded hover:bg-slate-200/60 flex items-center justify-center transition-colors ${editor?.isActive('link') ? 'bg-slate-200/80 text-olive' : 'text-text-muted'}`}
                                 title="Link"
                             >
                                 <LinkIcon size={16} strokeWidth={2.5} />
@@ -397,40 +411,47 @@ export const DiscussionPanel: React.FC = () => {
                             </button>
                         </div>
 
-                        <form onSubmit={handleSendMessage} className="relative p-1">
-                            <textarea
-                                ref={textareaRef}
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handleSendMessage();
-                                    }
-                                }}
-                                placeholder={`Message ${activeItemTitle}...`}
-                                className="w-full bg-transparent border-none px-4 py-3 text-[14px] text-text-primary placeholder:text-text-muted/60 focus:ring-0 outline-none resize-none h-24"
-                            />
+                        <div className="relative p-1">
+                            <EditorContent editor={editor} />
                             <div className="flex justify-between items-center px-4 pb-2">
                                 <div className="text-[10px] text-text-muted/60 font-medium">
-                                    Press <kbd className="font-sans border border-border px-1 rounded bg-slate-50">Enter</kbd> to send
+                                    Rich text supported
                                 </div>
                                 <button
-                                    type="submit"
-                                    disabled={!newMessage.trim()}
-                                    className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-xs transition-all ${newMessage.trim()
+                                    onClick={() => handleSendMessage()}
+                                    disabled={!editor || editor.isEmpty}
+                                    className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-xs transition-all ${editor && !editor.isEmpty
                                             ? 'bg-olive text-white shadow-sm hover:shadow-md hover:translate-y-[-1px] active:translate-y-[0px]'
                                             : 'bg-slate-100 text-text-muted/40 cursor-not-allowed'
                                         }`}
                                 >
                                     <span>Send</span>
-                                    <Send size={14} fill={newMessage.trim() ? "currentColor" : "none"} />
+                                    <Send size={14} fill={editor && !editor.isEmpty ? "currentColor" : "none"} />
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <style jsx global>{`
+                .tiptap p.is-editor-empty:first-child::before {
+                    color: #adb5bd;
+                    content: attr(data-placeholder);
+                    float: left;
+                    height: 0;
+                    pointer-events: none;
+                }
+                .tiptap p {
+                    margin: 0;
+                }
+                .tiptap {
+                    min-height: 100px;
+                }
+                .tiptap :focus {
+                    outline: none;
+                }
+            `}</style>
         </div>
     );
 };
